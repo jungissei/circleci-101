@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  aws-ecr: isseimatsuhashi/my-apache2
+  aws-ecr: circleci/aws-ecr@4.0.1
 workflows:
   build_and_push_image:
     jobs:
