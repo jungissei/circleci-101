@@ -1,40 +1,13 @@
-version: 2
-jobs:
-  one:
-    docker:
-      - image: ruby:issei-dev
-    steps:
-      - checkout
-      - run: echo "A first hello"
-      - run: mkdir -p my_workspace
-      - run: echo "Trying out workspaces" > my_workspace/echo-output
-      - persist_to_workspace:
-          # 絶対パス、または working_directory からの相対パスにする必要があります
-          root: my_workspace
-          # root からの相対パスにする必要があります
-          paths:
-            - echo-output
-  two:
-    docker:
-      - image: circleci/ruby:2.4.1
-    steps:
-      - checkout
-      - run: echo "A more familiar hi"
-      - attach_workspace:
-          # 絶対パス、または working_directory からの相対パスにする必要があります
-          at: my_workspace
-
-      - run: |
-          if [[ $(cat my_workspace/echo-output) == "Trying out workspaces" ]]; then
-            echo "It worked!";
-          else
-            echo "Nope!"; exit 1
-          fi
+version: 2.1
+orbs:
+  aws-ecr: isseimatsuhashi/my-apache2
 workflows:
-  version: 2
-  one_and_two:
+  build_and_push_image:
     jobs:
-      - one
-      - two:
-          requires:
-            - one
+      - aws-ecr/build_and_push_image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          region: AWS_DEFAULT_REGION
+          repo: batch
+          tag: circleci
