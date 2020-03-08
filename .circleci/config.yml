@@ -1,13 +1,21 @@
 version: 2.1
 orbs:
-  aws-ecr: isseimatsuhashi/my-apache2
+  aws-ecr: circleci/aws-ecr@6.7.1
+  aws-ecs: circleci/aws-ecs@1.1.0
 workflows:
-  build_and_push_image:
+  build-and-deploy:
     jobs:
       - aws-ecr/build_and_push_image:
           account-url: AWS_ECR_ACCOUNT_URL
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           region: AWS_DEFAULT_REGION
-          repo: issei-dev
-          tag: circleci
+          repo: 'issei-dev'
+          tag: '${CIRCLE_SHA1}'
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build_and_push_image
+          family: 'demotask'
+          cluster-name: 'cluster01'
+          service-name: 'service01'
+          container-image-name-updates: 'container=${AWS_CONTAINER_NAME},image-and-tag=${AWS_ECR_ACCOUNT_URL}/issei-dev:${CIRCLE_SHA1}'
