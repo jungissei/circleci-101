@@ -13,7 +13,7 @@ workflows:
           tag: '${CIRCLE_SHA1}'
       - aws-ecs/deploy-service-update:
           requires:
-            - aws-ecr/build_and_push_image
+            - aws-ecr/build-and-push-image
           family: 'demotask'
           cluster-name: 'cluster01'
           service-name: 'service01'
