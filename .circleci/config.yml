@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@6.7.1
-  # aws-ecs: circleci/aws-ecs@1.1.0
+  aws-ecs: circleci/aws-ecs@1.1.0
 workflows:
   build-and-deploy:
     jobs:
@@ -12,10 +12,10 @@ workflows:
           region: AWS_DEFAULT_REGION
           repo: 'issei-dev'
           tag: '${CIRCLE_SHA1}'
-      # - aws-ecs/deploy-service-update:
-      #     requires:
-      #       - aws-ecr/build_and_push_image
-      #     family: 'demotask'
-      #     cluster-name: 'cluster01'
-      #     service-name: 'service01'
-      #     container-image-name-updates: 'container=${AWS_CONTAINER_NAME},image-and-tag=${AWS_ECR_ACCOUNT_URL}/issei-dev:${CIRCLE_SHA1}'
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build_and_push_image
+          family: 'demotask'
+          cluster-name: 'cluster01'
+          service-name: 'service01'
+          container-image-name-updates: 'container=${AWS_CONTAINER_NAME},image-and-tag=${AWS_ECR_ACCOUNT_URL}/issei-dev:${CIRCLE_SHA1}'
