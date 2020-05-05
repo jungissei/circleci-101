@@ -1,28 +1,11 @@
 version: 2.1
-commands:
-  sayhello:
-    description: "A very simple command for demonstration purposes"
-    parameters:
-      to:
-        type: string
-        default: "Hello World"
-    steps:
-      - run: echo "Hello "<< parameters.to >>
-  sayyoo:
-    description: "A very simple command for demonstration purposes"
-    parameters:
-      to:
-        type: string
-        default: "Yoo World"
-    steps:
-      - run: echo "Yoo "<< parameters.to >>
-
-jobs:
-  build:
+executors:
+  my-executor:
     docker:
-      - image: "circleci/node:9.6.1"
+      - image: circleci/ruby:2.5.1-node-browsers
+
+build:
+  my-job:
+    executor: my-executor
     steps:
-      - sayhello:
-          to: "James"
-      - sayyoo:
-          to: "James"
+      - run: echo outside the executor
