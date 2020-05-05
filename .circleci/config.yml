@@ -1,20 +1,18 @@
-version: 2
+version: 2.1
+commands:
+  sayhello:
+    description: "A very simple command for demonstration purposes"
+    parameters:
+      to:
+        type: string
+        default: "Hello World"
+    steps:
+      - run: echo << parameters.to >>
+
 jobs:
-  build:
+  myjob:
     docker:
-      - image: circleci/node:4.8.2
+      - image: "circleci/node:9.6.1"
     steps:
-      - checkout
-      - run: echo "hello build"
-  test:
-    docker:
-      - image: circleci/node:4.8.2
-    steps:
-      - checkout
-      - run: echo "hello test"
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build
-      - test
+      - sayhello:
+          to: "James"
