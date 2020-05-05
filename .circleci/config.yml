@@ -7,6 +7,7 @@ commands:
         type: string
         default: "Hello World"
     steps:
+      - run: echo "Hello "
       - run: echo << parameters.to >>
   sayyoo:
     description: "A very simple command for demonstration purposes"
@@ -15,6 +16,7 @@ commands:
         type: string
         default: "Yoo World"
     steps:
+      - run: echo "Yoo "
       - run: echo << parameters.to >>
 
 jobs:
