@@ -1,22 +1,7 @@
 version: 2.1
 orbs:
-  aws-ecr: circleci/aws-ecr@6.5.0
-  aws-ecs: circleci/aws-ecs@0.0.10
-
+    hello: circleci/hello-build@0.0.7 # circleci/buildpack-deps Docker イメージを使います
 workflows:
-  build-and-deploy:
-    jobs:
-      - aws-ecr/build-and-push-image:
-          account-url: AWS_ECR_ACCOUNT_URL
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          region: AWS_REGION
-          repo: 'issei-dev'
-          tag: '${CIRCLE_SHA1}'
-      - aws-ecs/deploy-service-update:
-          requires:
-            - aws-ecr/build-and-push-image
-          family: 'demotask'
-          cluster-name: 'cluster01'
-          service-name: 'service01'
-          container-image-name-updates: 'container=${AWS_CONTAINER_NAME},image-and-tag=${AWS_ECR_ACCOUNT_URL}/issei-dev:${CIRCLE_SHA1}'
+    "Hello Workflow":
+        jobs:
+          - hello/hello-build
