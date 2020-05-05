@@ -8,6 +8,14 @@ commands:
         default: "Hello World"
     steps:
       - run: echo << parameters.to >>
+  sayyoo:
+    description: "A very simple command for demonstration purposes"
+    parameters:
+      to:
+        type: string
+        default: "Yoo World"
+    steps:
+      - run: echo << parameters.to >>
 
 jobs:
   build:
@@ -15,4 +23,6 @@ jobs:
       - image: "circleci/node:9.6.1"
     steps:
       - sayhello:
+          to: "James"
+      - sayyoo:
           to: "James"
